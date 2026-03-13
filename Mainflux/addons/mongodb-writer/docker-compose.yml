@@ -36,16 +36,15 @@ services:
   mongodb-writer:
     image: mainflux/mongodb-writer:${MF_RELEASE_TAG}
     container_name: mainflux-mongodb-writer
-    depends_on:
-      - mongodb
     restart: on-failure
     environment:
       MF_MONGO_WRITER_LOG_LEVEL: ${MF_MONGO_WRITER_LOG_LEVEL}
       MF_NATS_URL: ${MF_NATS_URL}
       MF_MONGO_WRITER_PORT: ${MF_MONGO_WRITER_PORT}
       MF_MONGO_WRITER_DB: ${MF_MONGO_WRITER_DB}
-      MF_MONGO_WRITER_DB_HOST: mongodb
-      MF_MONGO_WRITER_DB_PORT: ${MF_MONGO_WRITER_DB_PORT}
+      # Defaults to local mongodb service; set MF_MONGO_WRITER_DB_HOST to Atlas host/URI to use external MongoDB.
+      MF_MONGO_WRITER_DB_HOST: ${MF_MONGO_WRITER_DB_HOST:-mongodb}
+      MF_MONGO_WRITER_DB_PORT: ${MF_MONGO_WRITER_DB_PORT:-27017}
     ports:
       - ${MF_MONGO_WRITER_PORT}:${MF_MONGO_WRITER_PORT}
     networks:
